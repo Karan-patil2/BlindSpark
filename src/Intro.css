@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;600&display=swap');
+
+/* :root {
+  --fire-orange: #ff6a00;
+  --fire-yellow: #ffcc00;
+  --black: #000000;
+  --white: #ffffff;
+} */
+
+:root {
+  --black:        #000000;
+  --surface:      #0a0a0a;
+  --orange:       #ff5500;
+  --orange-glow:  #ff8c00;
+  --ember:        #ffcc00;
+  --white:        #ffffff;
+  --text-dim:     rgba(255, 255, 255, 0.45);
+  --border:       rgba(255, 255, 255, 0.07);
+  --warm-surface: #1a0500;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  background: var(--black);
+  overflow: hidden;
+}
+
+/* ── CONTAINER ─────────────────────────────────────── */
+.intro-container {
+  width: 100vw;
+  height: 100vh;
+  background: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* subtle noise grain overlay */
+.intro-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0.6;
+}
+
+/* ── AMBIENT GLOW centered on fire ────────────────── */
+.ambient-glow {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 90, 0, 0.14) 0%,
+    rgba(255, 40, 0, 0.06) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+  transform: translate(-50%, -50%);
+}
+
+.ambient-glow.visible {
+  opacity: 1;
+}
+
+/* ── BRAND WRAPPER ─────────────────────────────────── */
+.brand-wrapper {
+  position: relative;
+  z-index: 3;
+}
+
+/* ── BRAND TEXT ────────────────────────────────────── */
+.brand-name {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(64px, 11vw, 128px);
+  letter-spacing: 0.1em;
+  color: var(--white);
+  line-height: 1;
+  position: relative;
+  opacity: 0;
+  transform: scale(0.94) translateY(6px);
+  transition:
+    opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.3s cubic-bezier(0.16, 1, 0.3, 1),
+    text-shadow 1.3s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.brand-name.fade-in {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  text-shadow:
+    0 0 60px rgba(255, 100, 0, 0.28),
+    0 0 120px rgba(255, 50, 0, 0.1);
+}
+
+/* Inline anchor for the "I" — we measure its top for fire placement */
+.letter-i-anchor {
+  display: inline-block;
+  position: relative;
+}
+
+/* 1px invisible ref at the very top centre of the "I" glyph */
+.i-dot-ref {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+/* ── FIRE WRAPPER ──────────────────────────────────── */
+.fire-wrapper {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.fire-wrapper.visible {
+  opacity: 1;
+}
+
+.lottie-fire {
+  width: 80px;
+  height: 80px;
+  display: block;
+}
+
+/* ── TAGLINE ───────────────────────────────────────── */
+.tagline {
+  position: absolute;
+  bottom: calc(50% - 90px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(10px, 1.1vw, 13px);
+  font-weight: 300;
+  letter-spacing: 0.5em;
+  color: rgba(255, 255, 255, 0.28);
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+  z-index: 4;
+}
+
+.tagline.visible {
+  opacity: 1;
+}
+
+/* ── ENTER CTA ─────────────────────────────────────── */
+.enter-cta {
+  position: absolute;
+  bottom: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.enter-cta.visible {
+  opacity: 1;
+}
+
+.enter-btn {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  background: transparent;
+  border: 1px solid rgba(255, 100, 0, 0.45);
+  padding: 13px 44px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease, border-color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.enter-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 90, 0, 0.12), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.enter-btn:hover::before  { transform: translateX(100%); }
+.enter-btn:hover {
+  border-color: rgba(255, 140, 0, 0.85);
+  color: #fff;
+  text-shadow: 0 0 14px rgba(255, 100, 0, 0.55);
+}
+
+.pulse-line {
+  width: 1px;
+  height: 30px;
+  background: linear-gradient(to bottom, rgba(255, 90, 0, 0.7), transparent);
+  animation: pulse-down 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse-down {
+  0%, 100% { opacity: 0;   transform: scaleY(0.5) translateY(-6px); }
+  55%       { opacity: 1;   transform: scaleY(1)   translateY(0); }
+}
+/* ── PASTE AT THE VERY BOTTOM OF Intro.css ── */
+
+/* Orange flood — fades in on top of the grown fire */
+.orange-flood {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  background: #ff5500;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.orange-flood.visible {
+  opacity: 1;
+}
+
+.orange-flood.to-black {
+  background: #000;
+  opacity: 1;
+  transition: background 0.7s ease;
+}
+/* ── PASTE AT THE VERY BOTTOM OF Intro.css ── */
+
+/* Orange flood — fades in on top of the grown fire */
+.orange-flood {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  background: #ff5500;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.orange-flood.visible {
+  opacity: 1;
+}
+
+.orange-flood.to-black {
+  background: #000;
+  opacity: 1;
+  transition: background 0.7s ease;
+}
